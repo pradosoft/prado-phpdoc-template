@@ -1,0 +1,182 @@
+{% extends 'layout.html.twig' %}
+
+{% macro parent_links(parent, indent) %}
+    <dd style="padding-left:{{ indent }}px">
+        {% if indent > 0 %}
+            <img src="imgs/inherit.png" alt="Extended by">
+        {% endif %}
+        <a href="{{ parent|route('url') }}">{{ parent }}</a>
+        {% if parent.interfaces is not empty %}
+            implements
+            {% for interface in node.interfaces %}
+                <a href="{{ interface|route('url') }}">{{ interface }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+    </dd>
+    {% if parent.parent %}
+        {{ _self.parent_links(parent.parent, indent+30) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro print_method(method) %}
+    <tr data-order="{{method.name}}" id="{{method.name}}" n:class="{{method.deprecated ? 'deprecated'}}">
+        <td class="attributes"><code>
+            {{ method.visibility }}
+            {% if method.deprecated %}deprecated{% endif %}
+            {% if method.abstract %}abstract{% endif %}
+            {% if method.static %}static{% endif %}
+            {% if method.final %}final{% endif %}
+            </code>
+        </td>
+
+        <td class="name">
+            <div>
+                <a name="method_{{method.name}}"></a>
+                <code>
+                    {% apply spaceless %}
+                    <a href="{{ link(method) }}">{{ method.name }}</a>
+                    <span>(</span>
+                    {% for argument in method.arguments %}
+                        <span class="phpdocumentor-signature__argument">
+                            {% if argument.default is not null %}<span>[</span>{% endif %}
+                            {% if not loop.first %}<span>, </span>{% endif %}
+                            <span class="phpdocumentor-signature__argument__return-type">{{ argument.type|route('class:short')|join('|')|raw }}&nbsp;</span>
+                            {% if argument.isVariadic %}<span class="phpdocumentor-signature__argument__variadic-operator">...</span>{% endif %}
+                            {%- if argument.byReference -%}<span class="phpdocumentor-signature__argument__reference-operator">&amp;</span>{%- endif -%}
+                            <var>${{ argument.name }}</var>
+                            {% if argument.default is not null %}
+                                <span> = </span>
+                                <span class="phpdocumentor-signature__argument__default-value">{{ argument.default }}</span>
+                                <span> ]</span>
+                            {% endif %}
+                        </span>
+                    {% endfor %}
+                    <span>)</span>
+                    <span> : </span>
+                    <span>{{ method.response.type|route('class:short')|join('|')|raw }}</span>
+                    {% endapply %}
+                </code>
+
+                <div class="description short">
+                    {{ method.summary }}
+                    {{ method.description|description|markdown }}
+                </div>
+            </div>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro print_constant(constant) %}
+    <tr data-order="{{constant.name}}" id="{{constant.name}}" n:class="{{constant.deprecated ? 'deprecated'}}">
+        <td class="attributes">
+            <code>
+                {{ constant.visibility }}
+                {% if constant.deprecated %}deprecated{% endif %}
+                {{ not constant.type ? "mixed" : constant.type|route('class:short')|join('|')|raw }}
+            </code>
+        </td>
+
+        <td class="name">
+            <code>
+                <a name="constant_{{constant.name}}"><b>{{constant.name}}</b></a>
+            </code>
+
+            <div class="description short">
+                {{ constant.summary }}
+            </div>
+        </td>
+        <td class="value">
+            <div>
+                <code>{{ constant.value | default('""') }}</code>
+            </div>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% block content %}
+    <h1>Class
+        {% for breadcrumb in breadcrumbs(node) %}\<a href="{{ link(breadcrumb) }}">{{ breadcrumb.name }}</a>{% endfor %}\<a href="{{ node|route('url') }}">{{ node.name }}</a>
+    </h1>
+
+    <div class="description">
+        {{ node.summary }}
+        {{ node.description|description|markdown }}
+    </div>
+
+    {% if node.parent %}
+        <h4>Class hierarchy</h4>
+        <dl class="tree">
+        {{ _self.parent_links(node, 0) }}
+        </dl>
+    {% endif %}
+
+    {% if node.namespace %}
+        <b>Namespace:</b> {{ node.namespace }}<br/>
+    {% endif %}
+    {% for author in node.author %}
+        <b>Author:</b> {{ tag.description }}<br/>
+    {% endfor %}
+    {% for since in node.tags.since %}
+        <b>Since:</b> {{ since.version }}<br/>
+    {% endfor %}
+    {% for deprecated in node.tags.deprecated %}
+        <b>Deprecated since:</b> {{ deprecated.version }}<br/>
+    {% endfor %}
+    {% if node.path %}
+        <b>Located at:</b> {{ node.path|route('file:short') }}<br/>
+    {% endif %}
+
+    {% set methods = node.methods|sortByVisibility %}
+    <table class="summary methods" id="methods">
+    <caption>Methods summary</caption>
+    {% for method in methods %}
+        {{ _self.print_method(method) }}
+    {% endfor %}
+    </table>
+
+    {% set methods = methods(node)|sortByVisibility %}
+    <table class="summary inherited" >
+    <caption>Inherited methods</caption>
+    <tbody><tr>
+        <td><code>
+            {% for method in methods %}
+                <a href="{{ link(method) }}">{{ method.name }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </code></td>
+    </tr>
+    </tbody></table>
+
+    {% set constants = node.constants|sortByVisibility %}
+    <table class="summary constants" id="constants">
+    <caption>Constants summary</caption>
+    {% for constant in constants %}
+        {{ _self.print_constant(constant) }}
+    {% endfor %}
+    </table>
+
+    {% set constants = constants(node)|sortByVisibility %}
+    {% if constants is not empty %}
+        <table class="summary inherited" >
+        <caption>Inherited constants</caption>
+        <tbody><tr>
+            <td><code>
+                {% for constant in constants %}
+                    <a href="{{ link(constant) }}"><b>{{ constant }}</b></a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </code></td>
+        </tr>
+        </tbody></table>
+    {% endif %}
+
+{#
+        {{ include('components/class-title.html.twig') }}
+        {{ include('components/element-found-in.html.twig') }}
+        {{ include('components/element-header.html.twig') }}
+
+        {{ include('components/constants.html.twig') }}
+        {{ include('components/properties.html.twig') }}
+        {{ include('components/methods.html.twig') }}
+        {{ include('components/source-modal.html.twig') }}
+#}
+    </article>
+{% endblock %}

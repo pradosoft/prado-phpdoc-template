@@ -1,0 +1,39 @@
+<div id="menu">
+    <a href="index.html">Index</a>
+
+    {% if project.indexes.classes is not empty %}
+        <h3>Classes</h3>
+        <ul>
+        {% for class in project.indexes.classes %}
+            <li class="class">{{ class|route('class:short') }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if project.indexes.interfaces is not empty %}
+        <h3>Interfaces</h3>
+        <ul>
+        {% for interface in project.indexes.interfaces %}
+            <li class="interface">{{ interface|route('class:short') }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if project.indexes.traits is not empty %}
+        <h3>Traits</h3>
+        <ul>
+        {% for trait in project.indexes.traits %}
+            <li class="trait">{{ trait|route('class:short') }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if project.indexes.enums is not empty %}
+        <h3>Enums</h3>
+        <ul>
+        {% for enum in project.indexes.enums %}
+            <li class="enum">{{ enum|route('class:short') }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>

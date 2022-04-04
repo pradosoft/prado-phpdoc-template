@@ -1,0 +1,13 @@
+{
+	"name": "pradosoft/prado-phpdoc-template",
+	"description": "PhpDocumentor 3 template for Prado",
+	"homepage": "https://github.com/pradosoft/prado-phpdoc-template",
+	"license" : "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Fabio Bas",
+			"email": "ctrlaltca@gmail.com",
+			"role" : "Developer"
+		}
+	]
+}

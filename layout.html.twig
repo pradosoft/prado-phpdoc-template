@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    {% block head %}
+        <title>{% block title %}{{ project.name }}{% endblock %}</title>
+    {% endblock %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{ renderBaseUrlHeader() }}
+    <link rel="icon" href="imgs/favicon.ico"/>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="css/style.css">
+    {% endblock %}
+    {% block javascripts %}
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <script src="js/js.cookie.min.js"></script>
+        <script src="js/main.js"></script>
+    {% endblock %}
+</head>
+<body id="top">
+    <main class="phpdocumentor">
+        <div id="left">
+            {% include 'sidebar.html.twig' %}
+        </div>
+        <div id="splitter"></div>
+        <div id="right">
+            <div id="rightInner">
+                <div id="content">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+            <div id="footer">
+                {{ project.name }}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,1 @@
+# PhpDocumentor 3 template for Prado
