@@ -16,16 +16,54 @@
         <script src="js/jquery-3.6.0.min.js"></script>
         <script src="js/js.cookie.min.js"></script>
         <script src="js/main.js"></script>
+        <script src="js/fuse.js"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
     {% endblock %}
 </head>
 <body id="top">
-    <main class="phpdocumentor">
+    <main>
         <div id="left">
             {% include 'sidebar.html.twig' %}
         </div>
         <div id="splitter"></div>
         <div id="right">
             <div id="rightInner">
+                <section data-search-form class="search">
+                    <input type="search" class="search__field" placeholder="Loading .." />
+                    <section data-search-results class="search-results search-results--hidden">
+                        <header class="search-results__header">
+                        <button class="search-results__close">close</button>
+                            <h2 class="search-results__title">Search results</h2>
+                        </header>
+                        <ul class="search-results__entries"></ul>
+                    </section>
+                </section>
+                <div id="navigation">
+                    <ul>
+                        <li class="active">
+                            <span>Overview</span>
+                        </li>
+                        <li>
+                            <span>Class</span>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+                        </li>
+                        <li>
+                            <a href="annotation-group-todo.html" title="List of elements with todo annotation">
+                                <span>Todo</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="annotation-group-deprecated.html" title="List of elements with deprecated annotation">
+                                <span>Deprecated</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 <div id="content">
                     {% block content %}{% endblock %}
                 </div>
