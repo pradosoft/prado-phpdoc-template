@@ -1,0 +1,34 @@
+{% extends 'layout.html.twig' %}
+
+{% macro parent_links(parent, indent) %}
+    <dd style="padding-left:{{ indent }}px">
+        {% if indent > 0 %}
+            <img src="imgs/inherit.png" alt="Extended by">
+        {% endif %}
+        <a href="{{ link(parent) }}">{{ parent.fullyQualifiedStructuralElementName }}</a>
+    </dd>
+    {% for namespace in project.indexes.namespaces %}
+        {% if namespace.parent.name == parent.name %}
+            {{ _self.parent_links(namespace, indent+30) }}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{% block content %}
+
+<h3 id="namespaces">
+    Namespaces
+    <a href="#namespaces" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+{% if project.indexes.namespaces|default([]) is not empty %}
+    <dl class="tree">
+        {% for namespace in project.indexes.namespaces|sortByVisibility %}
+            {% if namespace.name == '\\' %}
+                {{ _self.parent_links(namespace, 0) }}
+            {% endif %}
+        {% endfor %}
+    </dl>
+{% endif %}
+
+{% endblock %}

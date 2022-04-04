@@ -1,0 +1,44 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <article class="phpdocumentor-element -namespace">
+        <h2 class="phpdocumentor-content__title">Namespace {{ node.name == '\\' ? 'API Documentation' : node.name }}</h2>
+
+        {% if node.classes is not empty %}
+            <h3>Classes</h3>
+            <ul>
+            {% for class in node.classes %}
+                <li class="class">{{ class|route('class:short') }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if node.interfaces is not empty %}
+            <h3>Interfaces</h3>
+            <ul>
+            {% for interface in node.interfaces %}
+                <li class="interface">{{ interface|route('class:short') }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if node.traits is not empty %}
+            <h3>Traits</h3>
+            <ul>
+            {% for trait in node.traits %}
+                <li class="trait">{{ trait|route('class:short') }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if node.enums is not empty %}
+            <h3>Enums</h3>
+            <ul>
+            {% for enum in node.enums %}
+                <li class="enum">{{ enum|route('class:short') }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+    </article>
+{% endblock %}

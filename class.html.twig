@@ -93,6 +93,10 @@
     </tr>
 {% endmacro %}
 
+{% block title %}
+    {{ node.name }} &raquo; {{ project.name }}
+{% endblock %}
+
 {% block content %}
     <h1>Class
         {% for breadcrumb in breadcrumbs(node) %}\<a href="{{ link(breadcrumb) }}">{{ breadcrumb.name }}</a>{% endfor %}\<a href="{{ node|route('url') }}">{{ node.name }}</a>
@@ -147,12 +151,14 @@
     </tbody></table>
 
     {% set constants = node.constants|sortByVisibility %}
-    <table class="summary constants" id="constants">
-    <caption>Constants summary</caption>
-    {% for constant in constants %}
-        {{ _self.print_constant(constant) }}
-    {% endfor %}
-    </table>
+    {% if constants is not empty %}
+        <table class="summary constants" id="constants">
+        <caption>Constants summary</caption>
+        {% for constant in constants %}
+            {{ _self.print_constant(constant) }}
+        {% endfor %}
+        </table>
+    {% endif %}
 
     {% set constants = constants(node)|sortByVisibility %}
     {% if constants is not empty %}
@@ -167,16 +173,5 @@
         </tr>
         </tbody></table>
     {% endif %}
-
-{#
-        {{ include('components/class-title.html.twig') }}
-        {{ include('components/element-found-in.html.twig') }}
-        {{ include('components/element-header.html.twig') }}
-
-        {{ include('components/constants.html.twig') }}
-        {{ include('components/properties.html.twig') }}
-        {{ include('components/methods.html.twig') }}
-        {{ include('components/source-modal.html.twig') }}
-#}
     </article>
 {% endblock %}

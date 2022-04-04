@@ -1,0 +1,40 @@
+{% extends 'layout.html.twig' %}
+
+{% set filesWithErrors = project.files|filter(file => file.allErrors is not empty) %}
+
+{% block title %}
+    {{ project.name }} &raquo; Compilation errors
+{% endblock %}
+
+{% block content %}
+<div class="phpdocumentor-row">
+    <h2 class="phpdocumentor-content__title">Errors</h2>
+
+    {% for file in filesWithErrors %}
+        <a id="{{ file.path }}"></a>
+         <table class="summary">
+            <caption>{{ file.name }}</caption>
+            <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for error in file.allerrors %}
+                <tr>
+                    <td class="phpdocumentor-cell">{{ error.severity }}</td>
+                    <td class="phpdocumentor-cell">{{ error.line }}</td>
+                    <td class="phpdocumentor-cell">{{ error.code|trans(error.context) }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="phpdocumentor-admonition phpdocumentor-admonition--success">
+            No errors have been found in this project.
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

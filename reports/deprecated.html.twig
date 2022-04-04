@@ -1,0 +1,43 @@
+{% extends 'layout.html.twig' %}
+
+{% set deprecatedElements = project.indexes.elements|filter(element => element.deprecated) %}
+{%
+    set filesWithDeprecatedElements = deprecatedElements|reduce(
+        (unique, item) => item.file.path in unique|keys ? unique : unique|merge({(item.file.path): item.file}), {}
+    )
+%}
+
+{% block title %}
+    {{ project.name }} &raquo; Deprecated elements
+{% endblock %}
+
+{% block content %}
+    <div class="phpdocumentor-row">
+        <h2 class="phpdocumentor-content__title">Deprecated</h2>
+
+        {% for file in filesWithDeprecatedElements %}
+            <a id="{{ file.path }}"></a>
+            <table class="summary">
+                <caption>{{ file.name }}</caption>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                {% for element in deprecatedElements|filter(el => el.file == file) %}
+                    {% for tag in element.tags.deprecated %}
+                        <tr>
+                            <td class="phpdocumentor-cell">{{ element.line }}</td>
+                            <td class="phpdocumentor-cell">{{ element|route}}</td>
+                            <td class="phpdocumentor-cell">{{ tag.description | description | markdown }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="phpdocumentor-admonition phpdocumentor-admonition--success">
+                No deprecated elements have been found in this project.
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

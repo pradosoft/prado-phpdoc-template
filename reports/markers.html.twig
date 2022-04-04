@@ -1,0 +1,40 @@
+{% extends 'layout.html.twig' %}
+
+{% set filesWithMarkers = project.files|filter(file => file.markers is not empty) %}
+
+{% block title %}
+    {{ project.name }} &raquo; Markers
+{% endblock %}
+
+{% block content %}
+    <div class="phpdocumentor-row">
+        <h2 class="phpdocumentor-content__title">Markers</h2>
+
+        {% for file in filesWithMarkers %}
+            <a id="{{ file.path }}"></a>
+            <table class="summary">
+                <caption>{{ file.name }}</caption>
+                <thead>
+                <tr>
+                    <th class="phpdocumentor-heading">Type</th>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for marker in file.markers %}
+                    <tr>
+                        <td class="phpdocumentor-cell">{{ marker.type }}</td>
+                        <td class="phpdocumentor-cell">{{ marker.line }}</td>
+                        <td class="phpdocumentor-cell">{{ marker.message }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="phpdocumentor-admonition phpdocumentor-admonition--success">
+                No markers have been found in this project.
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
