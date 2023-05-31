@@ -98,8 +98,8 @@
 {% endblock %}
 
 {% block content %}
-    <article class="phpdocumentor-element -class">
-    <h1>Class
+    <article class="phpdocumentor-element -interface">
+    <h1>Interface
         {% for breadcrumb in breadcrumbs(node) %}\<a href="{{ link(breadcrumb) }}">{{ breadcrumb.name }}</a>{% endfor %}\<a href="{{ node|route('url') }}">{{ node.name }}</a>
     </h1>
 
@@ -107,13 +107,6 @@
         {{ node.summary }}
         {{ node.description|description|markdown }}
     </div>
-
-    {% if node.parent %}
-        <h4>Class hierarchy</h4>
-        <dl class="tree">
-        {{ _self.parent_links(node, 0) }}
-        </dl>
-    {% endif %}
 
     {% if node.namespace %}
         <b>Namespace:</b> {{ node.namespace }}<br/>

@@ -17,12 +17,11 @@
     <transformation writer="twig" source="index.html.twig" artifact="index.html"/>
     <transformation writer="twig" source="namespaces.html.twig" artifact="namespaces.html"/>
     <transformation writer="twig" query="indexes.namespaces" source="namespace.html.twig" />
-
+    <transformation writer="twig" query="indexes.interfaces" source="interface.html.twig" />
     <!--
     <transformation writer="sourcecode" query="files" source="templates/default/source/file.source.txt.twig" artifact="files/{{path}}.txt" />
     <transformation writer="twig" query="files" source="templates/default/file.html.twig" />
     <transformation writer="twig" query="indexes.enums" source="templates/default/enum.html.twig" />
-    <transformation writer="twig" query="indexes.interfaces" source="templates/default/interface.html.twig" />
     <transformation writer="twig" query="indexes.traits" source="templates/default/trait.html.twig" />
     <transformation writer="twig" source="templates/default/indices/files.html.twig" artifact="indices/files.html" />
   -->
