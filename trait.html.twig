@@ -104,8 +104,8 @@
 {% endblock %}
 
 {% block content %}
-    <article class="phpdocumentor-element -interface">
-    <h1>Interface
+    <article class="phpdocumentor-element -class">
+    <h1>Trait
         {% for breadcrumb in breadcrumbs(node) %}\<a href="{{ link(breadcrumb) }}">{{ breadcrumb.name }}</a>{% endfor %}\<a href="{{ node|route('url') }}">{{ node.name }}</a>
     </h1>
 
@@ -114,9 +114,11 @@
         {{ node.description|description|markdown }}
     </div>
 
-    {% if node.namespace %}
-        <b>Namespace:</b> {{ node.namespace }}<br/>
-    {% endif %}
+    <h4>Trait hierarchy</h4>
+    <dl class="tree">
+    {{ _self.parent_links(node, 0) }}
+    </dl>
+
     {% for author in node.author %}
         <b>Author:</b> {{ author.description }}<br/>
     {% endfor %}
@@ -146,29 +148,4 @@
         </code></td>
     </tr>
     </tbody></table>
-
-    {% set constants = node.constants|sortByVisibility %}
-    {% if constants is not empty %}
-        <table class="summary constants" id="constants">
-        <caption>Constants summary</caption>
-        {% for constant in constants %}
-            {{ _self.print_constant(constant) }}
-        {% endfor %}
-        </table>
-    {% endif %}
-
-    {% set constants = node.inheritedConstants|sortByVisibility %}
-    {% if constants is not empty %}
-        <table class="summary inherited" >
-        <caption>Inherited constants</caption>
-        <tbody><tr>
-            <td><code>
-                {% for constant in constants %}
-                    <a href="{{ link(constant) }}"><b>{{ constant }}</b></a>{% if not loop.last %}, {% endif %}
-                {% endfor %}
-            </code></td>
-        </tr>
-        </tbody></table>
-    {% endif %}
-    </article>
 {% endblock %}

@@ -137,7 +137,7 @@
     {% endfor %}
     </table>
 
-    {% set methods = methods(node)|sortByVisibility %}
+    {% set methods = node.inheritedMethods|sortByVisibility %}
     <table class="summary inherited" >
     <caption>Inherited methods</caption>
     <tbody><tr>
@@ -159,7 +159,7 @@
         </table>
     {% endif %}
 
-    {% set constants = constants(node)|sortByVisibility %}
+    {% set constants = node.inheritedConstants|sortByVisibility %}
     {% if constants is not empty %}
         <table class="summary inherited" >
         <caption>Inherited constants</caption>
