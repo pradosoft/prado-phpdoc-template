@@ -8,8 +8,14 @@
         <a href="{{ parent|route('url') }}">{{ parent }}</a>
         {% if parent.interfaces is not empty %}
             implements
-            {% for interface in node.interfaces %}
-                <a href="{{ interface|route('url') }}">{{ interface }}</a>{% if not loop.last %}, {% endif %}
+            {% for interface in parent.interfaces %}
+                {{ interface|route('class:short') }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if parent.usedTraits is not empty %}
+            uses
+            {% for trait in parent.usedTraits %}
+                {{ trait|route('class:short') }}{% if not loop.last %}, {% endif %}
             {% endfor %}
         {% endif %}
     </dd>
@@ -108,16 +114,11 @@
         {{ node.description|description|markdown }}
     </div>
 
-    {% if node.parent %}
-        <h4>Class hierarchy</h4>
-        <dl class="tree">
-        {{ _self.parent_links(node, 0) }}
-        </dl>
-    {% endif %}
+    <h4>Class hierarchy</h4>
+    <dl class="tree">
+    {{ _self.parent_links(node, 0) }}
+    </dl>
 
-    {% if node.namespace %}
-        <b>Namespace:</b> {{ node.namespace }}<br/>
-    {% endif %}
     {% for author in node.author %}
         <b>Author:</b> {{ author.description }}<br/>
     {% endfor %}
